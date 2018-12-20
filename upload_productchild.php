@@ -27,7 +27,6 @@
 	<!-- <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/form.css">
-
 	<script src="js/jquery-2.2.3.min.js"></script>
 	<script src="js/bootstrap.bundle.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>

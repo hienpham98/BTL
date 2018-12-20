@@ -205,7 +205,7 @@
       <div class="container">
    		<h3 class="title"><strong><?=$result_product_selected['name']?></strong></h3>
          <hr>
-         <div style="margin-bottom: 1em;">Thiên đường Cometics and Spa - nơi bạn có thể tìm thấy đầy đủ sản phẩm chăm sóc sắc đẹp toàn thân, cam kết 100% chính hãng đến từ những thương hiệu mỹ phẩm nổi tiếng trên thế giới. Cho bạn làn Da đẹp chuẩn Guu với mức giá tốt nhất - Giao hàng trên toàn quốc.</div>
+         <div style="margin-bottom: 1em;">Thiên đường Cometics and Spa - nơi bạn có thể tìm thấy đầy đủ sản phẩm chăm sóc sắc đẹp toàn thân, cam kết 100% chính hãng đến từ những thương hiệu mỹ phẩm nổi tiếng trên thế giới. Cho bạn làn Da đẹp chuẩn gu với mức giá tốt nhất - Giao hàng trên toàn quốc.</div>
    		<div class="row">
             <?php foreach ($result_product_child as $value) { ?>
                <div class="col-md-3 col-sm-6">
