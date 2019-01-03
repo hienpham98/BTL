@@ -1,5 +1,6 @@
 <?php
 	include("lib_db.php");
+	date_default_timezone_set("Asia/Ho_Chi_Minh");
 	function get_upload($name){
 		//kiem tra error
 		if (!$_FILES
@@ -22,35 +23,43 @@
 		}
 	}
 
+
+
 	//get input
 	function get_input($name){
 		return isset($_REQUEST[$name]) ? trim($_REQUEST[$name]) : "";
 	}
-
+	$id = get_input("id") * 1;
 	$pid = get_input("pid") * 1;
 	$title = get_input("title");
 	$description = get_input("description");
+	$status = get_input("status");
 	$price = get_input("price");
 	$path_img = get_upload("path-name");
+	
 	
 	//tao sql
 	$stitle = sql_str($title);
 	$sdescription = sql_str($description);
+	$sstatus = sql_str($status);
 	$sprice = sql_str($price);
 	$spath_img = sql_str($path_img);
+	$date = date("Y-m-d H:i:s");
 	
-	
-	//tao sql
-	$sql = "insert into product_child (pid,name,description,price,image)
-	values ('{$pid}','{$stitle}','{$sdescription}','{$sprice}','{$spath_img}')";
-
+	//Check xem người dùng có nhập ảnh mới không nếu không thì ko update image trong CSDL
+	if ($path_img != "") {
+		$sql = "UPDATE product_child SET pid = '{$pid}', name = '{$stitle}', description = '{$sdescription}', status = '{$sstatus}', price = '{$sprice}', image = '{$spath_img}', LastUpdated = '{$date}' where id = '{$id}'";
+	}
+	else {
+		$sql = "UPDATE product_child SET pid = '{$pid}', name = '{$stitle}', description = '{$sdescription}', status = '{$sstatus}', price = '{$sprice}', LastUpdated = '{$date}' where id = '{$id}'";
+	}
 	$ret = exec_update($sql);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Complete Insert</title>
+	<title>Complete Edit</title>
 
 	<!-- <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -63,14 +72,14 @@
 </head>
 <body>
 	<script>
-		alert('Thêm sản phẩm thành công!');
+		alert('Sửa sản phẩm thành công!');
 	</script>
 	
 	<div class="block">
 		<img src="images system/norobot.jpeg" alt="No Robot" width="200" height="200">
 	</div>
 	<div class="block2">
-		<a class="btn btn-primary btn-lg padding" href="upload_productchild.php" style="user-select: none;">Nhấn để quay trở lại</a>
+		<a class="btn btn-primary btn-lg padding" href="update_delete_product.php" style="user-select: none;">Nhấn để quay trở lại</a>
 	</div>
 
 

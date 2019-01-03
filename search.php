@@ -11,7 +11,12 @@
    //End login section
    
    $id = isset($_REQUEST["id"]) ? $_REQUEST["id"] : 0;
-   if ($id < 1) return;
+
+   if(isset($_REQUEST['search'])) {
+      $text_find = $_REQUEST['search'];
+      $sql = "select * from product_child where name like '%{$_REQUEST['search']}%'";
+      $result_search = exec_select($sql);    
+   }
 
    $sql_product_selected = "select name from product where id={$id}";
    $result_product_selected = select_one($sql_product_selected);
@@ -27,12 +32,12 @@
 <html lang="vn">
 
 <head>
-	<title><?=$result_product_selected['name']?> - sản phẩm chính hãng từ thiên nhiên</title>
+	<title>Result search for <?=$text_find?></title>
 	<!-- Meta Tags -->
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
 	<meta name="keywords" content="Gleam Responsive web template, Bootstrap Web Templates, Flat Web Templates, Android Compatible web template,Smartphone Compatible web template, free webdesigns for Nokia, Samsung, LG, Sony Ericsson, Motorola web design" />
-<!-- 	<script>
+	<script>
 		addEventListener("load", function () {
 			setTimeout(hideURLbar, 0);
 		}, false);
@@ -40,7 +45,7 @@
 		function hideURLbar() {
 			window.scrollTo(0, 1);
 		}
-	</script> -->
+	</script>
 	<!-- //Meta Tags -->
 	<!-- Style-sheets -->
 	<link href="css/bootstrap.css" rel="stylesheet" type="text/css" media="all" />
@@ -89,7 +94,7 @@
                   <a href="" class="" style="position: relative;">
                      <i class="fas fa-shopping-cart"></i>
                   </a>
-                  <span style="position: absolute;left: 300px;top: -7px;display: block;padding: 0px 5px; background-color: red; font-size: 12px; border-radius: 50px 50px 50px 50px; color: #fff;">0</span>
+                  <span style="position: absolute;left: 260px;top: 42px;display: block;padding: 0px 6px; background-color: red; font-size: 12px; border-radius: 50px 50px 50px 50px; color: #fff;">0</span>
                </li>
                <li class="text-center">
                   <a href="https://www.facebook.com/profile.php?id=100004730736938&ref=bookmarks" class="facebook1">
@@ -207,25 +212,27 @@
    	</nav>
    <!-- End header -->  
       <div class="container">
-   		<h3 class="title"><strong><?=$result_product_selected['name']?></strong></h3>
+         <h3 class="title"><strong>Có <span style="color: red;"><?php echo count($result_search); ?></span> sản phẩm phù hợp với từ khóa <span style="color: red;"><?=$text_find?></span></strong></h3>
          <hr>
-         <div style="margin-bottom: 1em;">Thiên đường Cometics and Spa - nơi bạn có thể tìm thấy đầy đủ sản phẩm chăm sóc sắc đẹp toàn thân, cam kết 100% chính hãng đến từ những thương hiệu mỹ phẩm nổi tiếng trên thế giới. Cho bạn làn Da đẹp chuẩn Guu với mức giá tốt nhất - Giao hàng trên toàn quốc.</div>
-   		<div class="row">
-            <?php foreach ($result_product_child as $value) { ?>
-               <div class="col-md-3 col-sm-6">
-                  <div class="products">
-                     <?php if ($value['status'] != null) { ?>
-                        <div class="offer"><?=$value['status']?></div>
-                     <?php }
-                     else { } ?>
-                     <div class="thumbnail"><a href="#" ><img src="./<?=$value['image']?>" alt="Product Image" class="zoom"></a></div>
-                     <div class="productname"><?=$value['name']?></div>
-                     <h4 class="price"><?=$value['price']?> VNĐ</h4>
-                     <div class="button_group"><button class="button add-cart" type="button">Thêm vào giỏ</button><button class="button compare" type="button"><i class="fa fa-exchange"></i></button><button class="button wishlist" type="button"><i class="fa fa-heart-o"></i></button></div>
-                  </div>
+         <?php if ($result_search == null) { }
+            else{ ?>
+               <div class="row">
+                  <?php foreach ($result_search as $value) { ?>
+                     <div class="col-md-3 col-sm-6">
+                        <div class="products">
+                           <?php if ($value['status'] != null) { ?>
+                              <div class="offer"><?=$value['status']?></div>
+                           <?php }
+                           else { } ?>
+                           <div class="thumbnail"><a href="#" ><img src="./<?=$value['image']?>" alt="Product Image" class="zoom"></a></div>
+                           <div class="productname"><?=$value['name']?></div>
+                           <h4 class="price"><?=$value['price']?> VNĐ</h4>
+                           <div class="button_group"><button class="button add-cart" type="button">Thêm vào giỏ</button><button class="button compare" type="button"><i class="fa fa-exchange"></i></button><button class="button wishlist" type="button"><i class="fa fa-heart-o"></i></button></div>
+                        </div>
+                     </div>
+                  <?php } ?>
                </div>
             <?php } ?>
-         </div>
       </div>
    </header>
    <!-- Footer -->
@@ -346,8 +353,3 @@
 
 </body>
 </html>
-
-
-
-
-

@@ -137,8 +137,8 @@ if (isset($_POST['reg_admin'])) {
     $query = "INSERT INTO users_admin (username, email, password) 
           VALUES('$username', '$email', '$password')";
     mysqli_query($db, $query);
-    $_SESSION['username'] = $username;
-    $_SESSION['success'] = "Bạn đã đăng nhập thành công";
+    $_SESSION['username_admin'] = $username;
+    $_SESSION['success_admin'] = "Bạn đã đăng nhập thành công";
     header('location: upload_product.php');
   }
 }
@@ -162,8 +162,8 @@ if (isset($_POST['login_admin'])) {
     $query = "SELECT * FROM users_admin WHERE username='$username' AND password='$password'";
     $results = mysqli_query($db, $query);
     if (mysqli_num_rows($results) == 1) {
-      $_SESSION['username'] = $username;
-      $_SESSION['success'] = "Bạn đã đăng nhập thành công";
+      $_SESSION['username_admin'] = $username;
+      $_SESSION['success_admin'] = "Bạn đã đăng nhập thành công";
       header('location: upload_product.php');
     }else {
       array_push($errors, "Sai tài khoản hoặc mật khẩu");

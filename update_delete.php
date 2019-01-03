@@ -26,7 +26,6 @@
 	<!-- <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
 	<link rel="stylesheet" href="css/form.css">
-
 	<script src="js/jquery-2.2.3.min.js"></script>
 	<script src="js/bootstrap.bundle.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
@@ -91,7 +90,7 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 						<a class="dropdown-item" href="update_delete.php">Edit & Delete Content</a>
-						<a class="dropdown-item" href="update_delete_contentchild.php">Edit & Delete ContentChild</a>
+						<a class="dropdown-item" href="update_delete_child.php">Edit & Delete ContentChild</a>
 					</div>
 				</li>
 				<li class="nav-item" >
@@ -101,7 +100,7 @@
 		</div>
 	</nav>
 	<!-- End Navigation -->
-<!-- 
+
 	
 	<form action="upload_product_exec.php" method="post" class="margin">
 		<div class="form-inline row padding">
@@ -126,7 +125,7 @@
 				<button type="submit" class="btn btn-primary btncheck" name="insertdata" style="margin-left: 10.9em;">Save</button>
 			</div>
 		</div>
-	</form> -->
+	</form>
 
 
 	

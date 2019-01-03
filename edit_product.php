@@ -1,8 +1,15 @@
 <?php
 	include("lib_db.php");
 	session_start();
+	$id = isset($_REQUEST["id"]) ? $_REQUEST["id"] : 0;
+	if ($id<  1) return ;
+	//tao sql
+	$sql = "select * from product_child 
+	where id={$id}";
+	$result = select_one($sql);
 
-	//Login session
+	if (!$result) return ;
+	//Login section
   	if (!isset($_SESSION['username_admin'])) {
   		$_SESSION['msg'] = "Bạn phải đăng nhập trước";
   		header('location: login_admin.php');
@@ -12,17 +19,30 @@
 	  	unset($_SESSION['username_admin']);
 	  	header("location: login_admin.php");
   	}
-  	//End login session
+  	//End login section
+  	
+  	//Lấy ra id danh mục sản phẩm của sản phẩm cần sửa thông tin
+  	$sql_id = "SELECT id FROM category WHERE id = (SELECT cid FROM product WHERE id = {$result['pid']})";
+  	$result_id = select_one($sql_id);
 
-	$sql = "select * from category";
-	$result = exec_select($sql);
-	
+  	//Lấy ra tất cả các danh mục sản phẩm
+  	$sql_cate = "Select * from category";
+  	$result_cate = select_list($sql_cate);
+
+  	//Lấy ra danh sách loại sản phẩm của danh mục sản phẩm đã chọn bên trên
+  	$sql_product = "Select * from product where cid = {$result_id['id']}";
+  	$result_product = select_list($sql_product);
+
+  	//Lấy tên loại sản phẩm của sản phẩm đang cần sửa thông tin
+  	$sql_productGoal = "Select * from product where id = {$result['pid']}";
+  	$result_productGoal = select_one($sql_productGoal);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Quản trị web - Upload ProductChild</title>
+	<title>Quản trị web - Edit Product</title>
 
 	<!-- <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -110,11 +130,11 @@
 					</a>
 					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 						<a class="dropdown-item" href="upload_product.php">Insert Product</a>
-						<a class="dropdown-item active" href="upload_productchild.php">Insert ProductChild</a>
+						<a class="dropdown-item" href="upload_productchild.php">Insert ProductChild</a>
 					</div>
 				</li>
 				<li class="nav-item" >
-                	<a class="nav-link" href="update_delete_product.php">Edit & Delete Product</a>
+                	<a class="nav-link active" href="update_delete_product.php">Edit & Delete Product</a>
                 </li>
 				<li class="nav-item" >
                 	<a class="nav-link" href="upload_product.php?logout='1'" style="color: red;">Log out</a>
@@ -124,14 +144,22 @@
 	</nav>
 	<!-- End Navigation -->
 
-	
-	<form action="upload_productchild_exec.php" method="post" class="margin" enctype="multipart/form-data">
+	<form action="edit_product_exec.php" method="post" class="margin" enctype="multipart/form-data">
+		<div class="form-inline row padding">
+			<label for="inputId" class="col-sm-2 col-form-label">ID:</label>
+			<div class="col-sm-10">
+				<input name="id" class="form-control importdatacheck" id="inputId" value="<?php echo $result["id"] ?>" readonly>
+			</div>
+		</div>
 		<div class="form-inline row padding">
 			<label class="col-sm-2 col-form-label">Danh mục sản phẩm:</label>
 			<div class="col-sm-10">
 				<select class="form-control" id="exampleFormControlSelect1" name="type">
 					<option value="" style="color: gray;">Chọn danh mục sản phẩm</option>
-					<?php foreach ($result as $item) {?>
+					<?php foreach ($result_cate as $item) {?>
+						<?php if ($item[id] == $result_id[id]): ?>
+							<option selected value="<?php echo $item["id"]?>"><?php echo $item["name"]?></option>;
+						<?php continue; endif ?>
 						<option value="<?php echo $item["id"]?>"><?php echo $item["name"]?></option>
 					<?php } ?>
 				</select>
@@ -142,11 +170,23 @@
 			<div class="col-sm-10">
 				<select class="form-control" id="exampleFormControlSelect2" name="pid">
 					<option value="" style="color: gray;">Chọn loại sản phẩm</option>
+					<?php foreach ($result_product as $item) { ?>
+						<?php if ($item[id] == $result_productGoal[id]): ?>
+							<option selected value="<?php echo $item["id"]?>"><?php echo $item["name"]?></option>;
+						<?php continue; endif ?>
+						<option value="<?php echo $item["id"]?>"><?php echo $item["name"]?></option>;
+					<?php } ?>
 				</select>
 			</div>
 		</div>
 		<div class="form-inline row padding">
-			<label for="inputImage" class="col-sm-2 col-form-label">Ảnh sản phẩm:</label>
+			<label for="inputImage" class="col-sm-2 col-form-label">Ảnh cũ của sản phẩm:</label>
+			<div class="col-sm-10">
+				<img src="<?php echo $result['image'];?>" alt="Old Product Image" width="300" height="200">
+			</div>
+		</div>
+		<div class="form-inline row padding">
+			<label for="inputImage" class="col-sm-2 col-form-label">Ảnh mới sản phẩm:</label>
 			<div class="col-sm-10">
 				<input name="path-name" type="file">
 			</div>
@@ -154,19 +194,25 @@
 		<div class="form-inline row padding">
 			<label for="inputName" class="col-sm-2 col-form-label">Tên sản phẩm:</label>
 			<div class="col-sm-10">
-				<input name="title" class="form-control importdatacheck" id="inputName" placeholder="Tên sản phẩm..." value="">
+				<input name="title" class="form-control importdatacheck" id="inputName" placeholder="Tên sản phẩm..." value="<?php echo $result['name'];?>">
 			</div>
 		</div>
 		<div class="form-inline row padding">
 			<label for="inputDes" class="col-sm-2 col-form-label">Ghi chú sản phẩm:</label>
 			<div class="col-sm-10">
-				<textarea class="form-control importdatacheck changeinput" name="description" rows="5" id="inputDes" placeholder="Ghi chú..."></textarea>
+				<textarea class="form-control importdatacheck changeinput" name="description" rows="5" id="inputDes" placeholder="Ghi chú..."><?php echo $result['description'];?></textarea>
+			</div>
+		</div>
+		<div class="form-inline row padding">
+			<label for="inputDes" class="col-sm-2 col-form-label">Trạng thái sản phẩm:</label>
+			<div class="col-sm-10">
+				<input name="status" class="form-control importdatacheck" id="inputSts" placeholder="Trạng thái sản phẩm..." value="<?php echo $result['status'];?>">
 			</div>
 		</div>
 		<div class="form-inline row padding">
 			<label for="inputPrice" class="col-sm-2 col-form-label">Giá sản phẩm:</label>
 			<div class="col-sm-10">
-				<input name="price" class="form-control importdatacheck" id="inputPrice" placeholder="Giá sản phẩm..." value="">
+				<input name="price" class="form-control importdatacheck" id="inputPrice" placeholder="Giá sản phẩm..." value="<?php echo $result['price'];?>">
 			</div>
 		</div>
 		<div class="form-inline row padding" style="padding-left: 58px;">

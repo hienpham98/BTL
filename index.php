@@ -3,9 +3,9 @@
 	session_start();
 	//Login section
 	if (isset($_GET['logout'])) {
-	session_destroy();
-	unset($_SESSION['username']);
-	header("location: index.php");
+		session_destroy();
+		unset($_SESSION['username']);
+		header("location: index.php");
 	}
 	//End login section
 ?>
@@ -68,7 +68,7 @@
 						<a href="" class="" style="position: relative;">
 							<i class="fas fa-shopping-cart"></i>
 						</a>
-						<span style="position: absolute;left: 260px;top: 42px;display: block;padding: 0px 6px; background-color: red; font-size: 12px; border-radius: 50px 50px 50px 50px; color: #fff;">0</span>
+						<span style="position: absolute;left: 254px;top: 43px;display: block;padding: 0px 6px; background-color: red; font-size: 12px; border-radius: 50px 50px 50px 50px; color: #fff;">0</span>
 					</li>
 					<li class="text-center">
 						<a href="https://www.facebook.com/profile.php?id=100004730736938&ref=bookmarks" class="facebook1">

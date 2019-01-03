@@ -3,13 +3,13 @@
 	session_start();
 
 	//Login session
-  	if (!isset($_SESSION['username'])) {
+  	if (!isset($_SESSION['username_admin'])) {
   		$_SESSION['msg'] = "Bạn phải đăng nhập trước";
   		header('location: login_admin.php');
   	}
   	if (isset($_GET['logout'])) {
 	  	session_destroy();
-	  	unset($_SESSION['username']);
+	  	unset($_SESSION['username_admin']);
 	  	header("location: login_admin.php");
   	}
   	//End login session
@@ -21,7 +21,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Quản trị web - Insert Content</title>
+	<title>Quản trị web - Upload Product</title>
 
 	<!-- <link rel="shortcut icon" href="./img/favicon.png" type="image/x-icon"> -->
 	<link rel="stylesheet" href="css/bootstrap.min.css">
@@ -70,7 +70,7 @@
 	<!-- Navigation -->
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
 		<i class="fas fa-chalkboard-teacher" style="color: white; font-size: 1.5em;"></i>
-		<span class="navbar-text" style="padding-left: 0.7em; padding-right: 2em; color: white;">Welcome Admin <span style="font-weight: 700;"><?php echo $_SESSION['username']; ?></span></span>
+		<span class="navbar-text" style="padding-left: 0.7em; padding-right: 2em; color: white;">Welcome Admin <span style="font-weight: 700;"><?php echo $_SESSION['username_admin']; ?></span></span>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -85,15 +85,9 @@
 						<a class="dropdown-item" href="upload_productchild.php">Insert ProductChild</a>
 					</div>
 				</li>
-				<li class="nav-item dropdown">
-					<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink2" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						Edit & Delete
-					</a>
-					<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-						<a class="dropdown-item" href="update_delete.php">Edit & Delete Content</a>
-						<a class="dropdown-item" href="update_delete_contentchild.php">Edit & Delete ContentChild</a>
-					</div>
-				</li>
+				<li class="nav-item" >
+                	<a class="nav-link" href="update_delete_product.php">Edit & Delete Product</a>
+                </li>
 				<li class="nav-item" >
                 	<a class="nav-link" href="upload_product.php?logout='1'" style="color: red;">Log out</a>
                 </li>
